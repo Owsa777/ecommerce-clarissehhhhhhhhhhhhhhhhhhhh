@@ -1,19 +1,16 @@
 import os
-impor environ
+import environ
 
 
 env = environ.Env()
 
+#Leer el archivo .env
+environ.Env.read_env()
 
-environ.env.read_env()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-SECRET_KEY = env('SECRET_KEY')
-
-DEBUG = end('DEBUG')
-
-ALLOWED_HOSTS = ["*"]
+SECRET_KEY = '5kd*0kr2w03r8*mec3x9hpi5_i&w!%-zc%qjii4cv57v5sm4jr'
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
 EMAIL_BACKEND = 'django.core.mail,backend.console.EmailBackend'
 
@@ -26,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
 ]
 
 MIDDLEWARE = [
