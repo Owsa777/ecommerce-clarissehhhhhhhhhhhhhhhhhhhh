@@ -3,15 +3,14 @@ import environ
 
 env = environ.Env()
 
-
 environ.Env.read_env()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = '5kd*0kr2w03r8*mec3x9hpi5_i&w!%-zc%qjii4cv57v5sm4jr'
-DEBUG = True
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['*']
 
-EMAIL_BACKEND = 'django.core.mail,backend.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 
@@ -24,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'crispy_forms',
+    'cart',
 ]
 
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
@@ -62,8 +62,12 @@ WSGI_APPLICATION = 'clarisse.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Clarisse1',
+        'USER': 'Clarisse',
+        'PASSWORD': 'Casa2618',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
