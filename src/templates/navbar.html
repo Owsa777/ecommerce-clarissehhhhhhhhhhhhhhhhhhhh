@@ -4,9 +4,17 @@
             <li><a href="/">Home</a></li>
             <li><a href="{% url 'cart:product-list' %}">Productos</a></li>
             <li><a href="{% url 'contact' %}">Contacto</a></li>
+            <li>
+              {% for CategoryVariation in object_list %}
+            <a href="#">{{ CategoryVariation.name }}</a>
+              {% endfor %}
+            </li>
             {% if request.user.is_staff %}
                 <li><a href="/">Staff</a></li>
             {% endif %}
         </ul>
     </div>
+
+
+
 </nav>

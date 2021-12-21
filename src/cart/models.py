@@ -37,6 +37,13 @@ class SizeVariation(models.Model):
 
     def __str__(self):
         return self.name
+class CategoryVariation(models.Model):
+    name = models.CharField(max_length = 50)
+
+    def __str__(self):
+        return self.name
+
+
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
@@ -49,6 +56,7 @@ class Product(models.Model):
     active = models.BooleanField(default = False)
     available_colour = models.ManyToManyField(ColourVariation)
     available_sizes = models.ManyToManyField(SizeVariation)
+    category = models.ManyToManyField(CategoryVariation)
     def __str__(self):
         return self.title
 
@@ -93,6 +101,17 @@ class Order(models.Model):
     def reference_number(self):
         return f"ORDER-{self.pk}"
 
+    def get_raw_subtotal(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_raw_total_item_price()
+        return total
+
+    def get_raw_total(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_raw_total_item_price()
+        return total
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete = models.CASCADE)

@@ -18,13 +18,14 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="<col-md-7>">
-        <h2 class="h3 mb-3 text-blacj">Get in touch</h2>
+        <h2 class="h3 mb-3 text-blacj">Contactanos, !Tu opinion es importante para nosotros</h2>
+        <br>
       </div>
       <div class="col-md-7">
         <form method="POST">
             {% csrf_token %}
             {{ form | crispy }}
-            <input type="submit" class="btn btn-primary btn-lg btn-block" value="Submit message"/>
+            <input type="submit" class="btn btn-primary btn-lg btn-block" value="Enviar Comentario"/>
         </form>
 
       </div>

@@ -4,11 +4,13 @@ from .models import (
             Order,
             OrderItem,
             ColourVariation,
-            SizeVariation)
+            SizeVariation,
+            CategoryVariation)
 
 admin.site.register(Product)
 admin.site.register(Order)
 admin.site.register(OrderItem)
 admin.site.register(ColourVariation)
+admin.site.register(CategoryVariation)
 admin.site.register(SizeVariation)
 # Register your models here.

@@ -1,10 +1,14 @@
 from django.shortcuts import get_object_or_404, reverse, redirect
 from django.views import generic
 from .utils import get_or_set_order_session
-from .models import Product, OrderItem
-from .forms import AddToCartForm
+from .models import Product, OrderItem, CategoryVariation
+from .forms import AddToCartForm, AddressForm
 
-# Create your views here.
+class CategoriVar(generic.ListView):
+    template_name = 'navbar.html'
+    queryset = CategoryVariation.objects.all()
+
+
 class ProductListView(generic.ListView):
     template_name = 'cart/product_list.html'
     queryset = Product.objects.all()
@@ -18,7 +22,7 @@ class ProductDetailView(generic.FormView):
 
 
     def get_success_url(self):
-        return reverse("home")
+        return reverse("cart:sumary")
 
 
     def get_form_kwargs(self):
@@ -38,7 +42,7 @@ class ProductDetailView(generic.FormView):
 
         if item_filter.exists():
             item = item_filter.first()
-            item.quantity = int(form.cleaned_data['quantity'])
+            item.quantity += int(form.cleaned_data['quantity'])
             item.save()
         else:
             new_item = form.save(commit = False)
@@ -69,9 +73,32 @@ class IncreaseQuantity(generic.View):
         order_item.save()
         return redirect("cart:sumary")
 
-class DecreaceQuantity(generic.View):
+class DecreaseQuantity(generic.View):
     def get(self, request, *args, **kwargs):
         order_item = get_object_or_404(OrderItem, id = kwargs['pk'] )
-        order_item.quantity -= 1
-        order_item.save()
+        if order_item.quantity == 1:
+            order_item.delete()
+        else:
+            order_item.quantity -= 1
+            order_item.save()
         return redirect("cart:sumary")
+
+class DeleteProduct(generic.View):
+    def get(self, request, *args, **kwargs):
+        order_item = get_object_or_404(OrderItem, id = kwargs['pk'] )
+        order_item.delete()
+        return redirect("cart:sumary")
+
+class CheckoutView(generic.FormView):
+    template_name = 'cart/checkout.html'
+    form_class = AddressForm
+
+    def get_form_kwargs(self):
+        kwargs = super(CheckoutView, self).get_form_kwargs()
+        kwargs['user_id'] = self.request.user.id
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(CheckoutView, self).get_context_data(**kwargs)
+        context['order'] = get_or_set_order_session(self.request)
+        return context

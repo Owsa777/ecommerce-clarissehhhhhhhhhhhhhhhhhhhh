@@ -9,5 +9,7 @@ urlpatterns = [
     path('shop/', views.ProductListView.as_view(), name = 'product-list'),
     path('shop/<slug>/', views.ProductDetailView.as_view(), name = 'product-detail'),
     path('increase-quantity/<pk>/', views.IncreaseQuantity.as_view(), name = 'increase-quantity'),
-    path('decreace-quantity/<pk>/', views.DecreaceQuantity.as_view(), name = 'decreace-quantity')
+    path('decrease-quantity/<pk>/', views.DecreaseQuantity.as_view(), name = 'decrease-quantity'),
+    path('delete-product/<pk>/', views.DeleteProduct.as_view(), name = 'delete-product'),
+    path('checkout/', views.CheckoutView.as_view(), name = 'checkout')
 ]
