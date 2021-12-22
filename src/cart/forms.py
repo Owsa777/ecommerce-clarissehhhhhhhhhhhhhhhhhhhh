@@ -22,17 +22,17 @@ class AddToCartForm(forms.ModelForm):
 
 
 class AddressForm(forms.Form):
-    Direccion_linea_1 = forms.CharField()
-    Direccion_linea_2 = forms.CharField()
-    Codigo_Postal = forms.CharField()
-    Estado = forms.CharField()
-    Ciudad = forms.CharField()
+    Direccion_linea_1 = forms.CharField(required = False)
+    Direccion_linea_2 = forms.CharField(required = False)
+    Codigo_Postal = forms.CharField(required = False)
+    Estado = forms.CharField(required = False)
+    Ciudad = forms.CharField(required = False)
 
-    Facturacion_Direccion_linea_1 = forms.CharField()
-    Facturacion_Direccion_linea_2 = forms.CharField()
-    Facturacion_Codigo_Postal = forms.CharField()
-    Facturacion_Estado = forms.CharField()
-    Facturacion_Ciudad = forms.CharField()
+    Facturacion_Direccion_linea_1 = forms.CharField(required = False)
+    Facturacion_Direccion_linea_2 = forms.CharField(required = False)
+    Facturacion_Codigo_Postal = forms.CharField(required = False)
+    Facturacion_Estado = forms.CharField(required = False)
+    Facturacion_Ciudad = forms.CharField(required = False)
 
     selected_shipping_address = forms.ModelChoiceField(
         Address.objects.none(), required = False
@@ -55,7 +55,7 @@ class AddressForm(forms.Form):
 
         billing_address_qs = Address.objects.filter(
             user = user,
-            address_type = 'S'
+            address_type = 'B'
         )
 
         self.fields['selected_shipping_address'].queryset = shipping_address_qs

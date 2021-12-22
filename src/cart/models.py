@@ -15,13 +15,14 @@ class Address(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     address_line_1 = models.CharField(max_length = 100)
     address_line_2 = models.CharField(max_length = 100)
+    state = models.CharField(max_length = 100)
     city = models.CharField(max_length = 100)
     zip_code = models.CharField(max_length = 100)
     address_type = models.CharField(max_length = 1, choices = ADDRESS_CHOISES)
     default = models.BooleanField(default = False)
 
     def __str__(self):
-        return f"{self.address_line_1}. {self.address_line_2}, {self.city}, {self.zip_code}"
+        return f"{self.address_line_1}. {self.address_line_2}, {self.state}, {self.city}, {self.zip_code}"
 
     class Meta:
         verbose_name_plural = 'Addresses'

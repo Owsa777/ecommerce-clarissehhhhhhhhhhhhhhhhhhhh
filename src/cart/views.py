@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404, reverse, redirect
 from django.views import generic
 from .utils import get_or_set_order_session
-from .models import Product, OrderItem, CategoryVariation
+from .models import Product, OrderItem, CategoryVariation, Address
 from .forms import AddToCartForm, AddressForm
+from django.contrib import messages
+from django.conf import settings
 
 class CategoriVar(generic.ListView):
     template_name = 'navbar.html'
@@ -93,6 +95,47 @@ class CheckoutView(generic.FormView):
     template_name = 'cart/checkout.html'
     form_class = AddressForm
 
+
+    def get_success_url(self):
+        return reverse('cart:payment') ## TODO: payment
+
+    def form_valid(self, form):
+        order = get_or_set_order_session(self.request)
+        selected_shipping_address = form.cleaned_data.get('selected_shipping_address')
+        selected_billing_address = form.cleaned_data.get('selected_billing_address')
+
+        if selected_shipping_address:
+            order.shipping_address = selected_shipping_address
+        else:
+            address = Address.objects.create(
+                address_type = 'S',
+                user = self.request.user,
+                address_line_1 = form.cleaned_data['Direccion_linea_1'],
+                address_line_2 = form.cleaned_data['Direccion_linea_2'],
+                zip_code = form.cleaned_data['Codigo_Postal'],
+                state = form.cleaned_data['Estado'],
+                city = form.cleaned_data['Ciudad'],
+            )
+            order.shipping_address = address
+
+        if selected_billing_address:
+            order.billing_address = selected_billing_address
+        else:
+            address = Address.objects.create(
+                address_type = 'B',
+                user = self.request.user,
+                address_line_1 = form.cleaned_data['Facturacion_Direccion_linea_1'],
+                address_line_2 = form.cleaned_data['Facturacion_Direccion_linea_2'],
+                zip_code = form.cleaned_data['Facturacion_Codigo_Postal'],
+                state = form.cleaned_data['Facturacion_Estado'],
+                city = form.cleaned_data['Facturacion_Ciudad'],
+            )
+            order.billing_address = address
+
+        order.save()
+        messages.info(self.request, "Las direcciones se han guardado correctamente")
+        return super(CheckoutView, self).form_valid(form)
+
     def get_form_kwargs(self):
         kwargs = super(CheckoutView, self).get_form_kwargs()
         kwargs['user_id'] = self.request.user.id
@@ -101,4 +144,12 @@ class CheckoutView(generic.FormView):
     def get_context_data(self, **kwargs):
         context = super(CheckoutView, self).get_context_data(**kwargs)
         context['order'] = get_or_set_order_session(self.request)
+        return context
+
+class PaymentView(generic.TemplateView):
+    template_name ='cart/payment.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PaymentView, self).get_context_data(**kwargs)
+        context['PAYPAL_CLIENT_ID'] = settings.PAYPAL_CLIENT_ID
         return context

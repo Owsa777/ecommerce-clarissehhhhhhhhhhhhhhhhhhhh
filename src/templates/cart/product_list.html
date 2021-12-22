@@ -22,8 +22,35 @@
             <a href="{{ product.get_absolute_url }}"><img src= "{{ product.image.url }}" class="img-fluid"></a>
           </figure>
           <div class="bloc-4-text p-4"></div>
-          <a href="{{ product.get_absolute_url }}"><h3>  <p>{{ product.title }}</p></h3></a>
-          <p class="mb-0">{{ product.description }}</p>
+          <div class="col-md-12 mb-0">
+            <div class="container">
+              <div class="row">
+                <div class="col">
+                  <h3> <a href="{{ product.get_absolute_url }}"> {{ product.title }} </a></h3>
+                </div>
+                <div class="col">
+                  <h3> <a href="{{ product.get_absolute_url }}"> ${{ product.price }} </a></h3>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <table class="table site-block-order-table mb-5">
+                  <thead>
+                    <th>Marca</th>
+                    <th>Estado</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Ninguna</td>
+                      <td>Nuevo</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </div>
       {% endfor %}
 
